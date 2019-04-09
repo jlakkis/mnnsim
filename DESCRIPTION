@@ -10,12 +10,13 @@ License: NA
 Encoding: UTF-8
 LazyData: true
 Imports:
-	scran,
 	Rtsne,
-	limma,
-	sva,
 	scales,
-	kBET,
 	tictoc,
 	tables,
 	parallel
+Remotes:
+	'scran', 
+	'limma', 
+	'sva', 
+	'kBET
