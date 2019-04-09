@@ -16,7 +16,7 @@ Imports:
 	tables,
 	parallel
 Remotes:
-	'scran', 
-	'limma', 
-	'sva', 
-	'kBET
+	scran, 
+	limma, 
+	sva, 
+	kBET
