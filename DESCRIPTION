@@ -1,0 +1,21 @@
+Package: mnnsim
+Type: Package
+Title: Perform Simulations to Compare Various Batch Correction Methods
+Version: 1.0.0
+Author: Justin Lakkis
+Maintainer: Justin Lakkis <jlakks@pennmedicine.upenn.edu>
+Description: More about what it does (maybe more than one line)
+    Compare the quality of various batch correction methods (Mutual Nearest Neighbors, Limma, ComBat) both visually with tSNE plots and quantitatively via silhouette scores.
+License: NA
+Encoding: UTF-8
+LazyData: true
+Imports:
+	scran,
+	Rtsne,
+	limma,
+	sva,
+	scales,
+	kBET,
+	tictoc,
+	tables,
+	parallel

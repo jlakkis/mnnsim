@@ -1,0 +1,390 @@
+# This script generates some (highly synthetic!) expression data with a batch effect
+# and uneven population composition between batches.
+setwd('/Users/jlakkis/Desktop/PhD Program/University of Pennsylvania - Biostatistics/Spring 2019 Classes/Programming for Biomedical Data Science/Simulation Project')
+library(scran)
+require(Rtsne)
+library(limma)
+library(sva)
+library(scales)
+library(kBET)
+library(tictoc)
+library(tables)
+library(parallel)
+
+generatedata=function(nc,ng,xm,xsigma,ym,ysigma,p1,p2) {
+    checkquality=function(types) {
+        return(min(sapply(c(1:3),function(c) sum(types==c))))
+    }
+
+    comp1 <- sample(1:3, prob=p1, size=nc, replace=TRUE)
+
+    # Sampling locations for cells in each component.
+
+    samples1 <- cbind(rnorm(n=nc, mean=xm[comp1],sd=xsigma[comp1]),
+                      rnorm(n=nc, mean=ym[comp1],sd=ysigma[comp1]))
+
+    # Random projection to D dimensional space, to mimic high-dimensional expression data.
+    proj <- matrix(rnorm(ng*nc), nrow=ng, ncol=2)
+    A1 <- samples1 %*% t(proj)
+
+    # Add normally distributed noise.
+    A1 <- A1 + rnorm(ng*nc)
+    rownames(A1) <- paste0("Cell", seq_len(nc), "-1")
+    colnames(A1) <- paste0("Gene", seq_len(ng))
+
+    # Setting proportions of each of the three cell types in batch 2.
+    comp2 <- sample(1:3, prob=p2, size=nc, replace=TRUE)
+
+    # Sampling locations for cells in each component.
+    samples2 <- cbind(rnorm(n=nc, mean=xm[comp2], sd=xsigma[comp2]),
+                      rnorm(n=nc, mean=ym[comp2], sd=ysigma[comp2]))
+
+    # Random projection, followed by adding batch effects and random noise.
+    A2 <- samples2 %*% t(proj)
+    A2 <- A2 + matrix(rep(rnorm(ng), each=nc), ncol=ng) # gene-specific batch effect (genes are columns)
+    A2 <- A2 + rnorm(ng*nc) # noise
+    rownames(A2) <- paste0("Cell", seq_len(nc), "-2")
+    colnames(A2) <- paste0("Gene", seq_len(ng))
+
+    B1 <- t(A1)
+    B2 <- t(A2)
+
+    return(list(B1,B2,comp1,comp2,checkquality(comp1),checkquality(comp2)))
+}
+
+docluster=function(mydata,type="uncorrected",silscores=TRUE,cosnorm=TRUE) {
+    if(!(type %in% c("uncorrected","mnn","limma","combat"))){
+        return(warning('Not a Valid Method: Please set argument "type" to one of: "uncorrected","mnn","limma","combat"'))
+    }
+
+    raw.all <- cbind(mydata[[1]], mydata[[2]])
+    batch.id <- rep(1:2, c(ncol(mydata[[1]]), ncol(mydata[[2]])))
+
+    if(type=='uncorrected') {
+        all.dists <- as.matrix(dist(t(raw.all)))
+    } else if (type =='mnn') {
+        Xmnn <- scran::mnnCorrect(mydata[[1]], mydata[[2]], k=20, sigma=1, cos.norm.in=cosnorm, cos.norm.out=cosnorm, var.adj=TRUE)
+        corre <- cbind(Xmnn$corrected[[1]],Xmnn$corrected[[2]])
+        all.dists <- as.matrix(dist(t(corre)))
+    } else if (type =='limma') {
+        Xlm <- limma::removeBatchEffect(raw.all, factor(batch.id))
+        all.dists <- as.matrix(dist(t(Xlm)))
+    } else {
+        sink("aux")
+        cleandat <- suppressMessages( sva::ComBat(raw.all, factor(batch.id), mod=NULL, prior.plots = FALSE) )
+        sink(NULL)
+        all.dists <- as.matrix(dist(t(cleandat)))
+    }
+
+    tsne = tryCatch ({
+        Rtsne::Rtsne(all.dists, is_distance=TRUE)
+    },
+    error = function (cond){
+        Rtsne::Rtsne(all.dists, is_distance=TRUE,perplexity = 10)
+    })
+
+    if(!silscores) {
+        ref.cols <- c("blue", "brown1", "gold2")
+        clust1 <- ref.cols[mydata[[3]]]
+        clust2 = ref.cols[mydata[[4]]]
+        clust.cols <- c(clust1, clust2)
+        return(list(tsne,batch.id,clust.cols))
+    }
+
+    dd <- as.matrix(dist(tsne$Y))
+
+    ct <- c(mydata[[3]],mydata[[4]])
+
+    sil <- (cluster::silhouette(as.numeric(ct), dd))
+
+    coefficients=c(mean(sil[,3]),
+                        mean(sil[sil[,1]==1,3]),
+                        mean(sil[sil[,1]==2,3]),
+                        mean(sil[sil[,1]==3,3]))
+
+    return(coefficients)
+}
+
+makeTSNE=function(seed=0,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ymus=c(5,5,0),ysds=c(1,0.1,1),prop1=c(0.3,0.5,0.2),prop2=c(0.65,0.3,0.05)) {
+    set.seed(seed)
+
+    plotFUN <- function(fname, Y, batch.id, cols, xlab="tSNE 1", ylab="tSNE 2", ...) {
+        plot(Y[,1], Y[,2],
+             pch=c(16, 2)[batch.id],
+             cex=c(2.5, 3.5)[batch.id],
+             col=alpha(cols, 0.6),
+             xlab=xlab, ylab=ylab, ...)
+    }
+
+    mydat=generatedata(ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2)
+
+    unc=docluster(mydat,silscores = FALSE)
+    mnn=docluster(mydat,type = 'mnn', silscores = FALSE,cosnorm = FALSE)
+    lm=docluster(mydat,type = 'limma', silscores = FALSE)
+    combat=docluster(mydat,type = 'combat', silscores = FALSE)
+
+    layout(matrix(c(1,2,3,4,5,5), 3, 2, byrow = TRUE))
+    plotFUN(paste0("figs/unc.png"), Y=unc[[1]]$Y, batch.id=unc[[2]], cols=unc[[3]], main="Uncorrected")
+    plotFUN(paste0("figs/mnn.png"), Y=mnn[[1]]$Y, batch.id=mnn[[2]], col=mnn[[3]], main="MNN")
+    plotFUN(paste0("figs/lmfit.png"), Y=lm[[1]]$Y, batch.id=lm[[2]], col=lm[[3]], main="limma")
+    plotFUN(paste0("figs/combat.png"), Y=combat[[1]]$Y, batch.id=combat[[2]], col=combat[[3]], main="ComBat")
+
+    plot.new()
+    legend('center', legend = c("Cell type 1", "Cell type 2", "Cell type 3", "Batch 1", "Batch 2"),
+           col = c("brown1", "gold2", "blue", "black", "black"),
+           pch = c(15, 15, 15, 16, 2),
+           cex = 1.75,y.intersp = 0.15, bty = "n")
+}
+
+dosim=function(nsim=100,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ymus=c(5,5,0),ysds=c(1,0.1,1),prop1=c(0.3,0.5,0.2),prop2=c(0.65,0.3,0.05),keep=F,cutoff=5,ncore=1,s.seed,dgeneratedata=generatedata,ddocluster=docluster) {
+
+    message('Starting a Simulation \n')
+
+    lparallizer=function(iter,pgeneratedata,pdocluster,pncells,pngenes,pxmus,pxsds,pymus,pysds,pprop1,pprop2,pcutoff,pkeep) {
+
+        tictoc::tic()
+        mydat=pgeneratedata(pncells,pngenes,pxmus,pxsds,pymus,pysds,pprop1,pprop2)
+        if(base::min(c(mydat[[5]],mydat[[6]]))<pcutoff) {
+            myoutput=base::list(rep(NA,4),rep(NA,4),rep(NA,4),rep(NA,4))
+            if(pkeep) {
+                myoutput=base::list(pdocluster(mydat),pdocluster(mydat,type='mnn'),pdocluster(mydat,type='limma'),pdocluster(mydat,type='combat'))
+            }
+            myoutput[[5]]=T
+        } else {
+            myoutput=base::list(pdocluster(mydat),pdocluster(mydat,type='mnn'),pdocluster(mydat,type='limma'),pdocluster(mydat,type='combat'))
+            myoutput[[5]]=F
+        }
+
+        sink("aux")
+            info=tictoc::toc()
+        sink(NULL)
+
+        myoutput[[6]]=info$toc-info$tic
+
+        base::return(myoutput)
+    }
+
+    RNGkind("L'Ecuyer-CMRG") # Set RNG
+    cl = makeCluster(ncore)
+    clusterSetRNGStream(cl, iseed=s.seed)
+    output = parLapply(cl, as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)
+    stopCluster(cl)
+
+    coefficientsuc=t(sapply(output,function(r) r[[1]]))
+    coefficientsmnn=t(sapply(output,function(r) r[[2]]))
+    coefficientslm=t(sapply(output,function(r) r[[3]]))
+    coefficientscombat=t(sapply(output,function(r) r[[4]]))
+    warntrack=sapply(output,function(r) r[[5]])
+    times=sapply(output,function(r) r[[6]])
+
+    names=c('overall', 'celltype1', 'celltype2', 'celltype3')
+    colnames(coefficientsuc) = colnames(coefficientsmnn) = colnames(coefficientslm) = colnames(coefficientscombat) = names
+
+    times=times[!is.na(coefficientsuc[,1])]
+    coefficientsuc=coefficientsuc[!is.na(coefficientsuc[,1]),]
+    coefficientsmnn=coefficientsmnn[!is.na(coefficientsmnn[,1]),]
+    coefficientslm=coefficientslm[!is.na(coefficientslm[,1]),]
+    coefficientscombat=coefficientscombat[!is.na(coefficientscombat[,1]),]
+
+    numwarn=sum(warntrack==T)
+
+    if(numwarn>0) {
+        if(keep == T) {
+            warning(paste0('Warning: A cell type is underrepresented in a batch for '), numwarn, ' Simulation Replicates \n Check Parameters')
+        } else{
+            warning(paste0('Warning: A cell type is underrepresented in a batch for '), numwarn, ' Simulation Replicates \n Dropping These Replicates')
+        }
+    }
+
+    message('\n')
+    myoutput=list(coefficientsuc,coefficientsmnn,coefficientslm,coefficientscombat,times)
+    names(myoutput)=c('Uncorrected Silhoutte Scores', 'MNN Silhoutte Scores', 'limma Silhoutte Scores', 'combat Silhoutte Scores', 'Replicate Runtimes')
+
+    return(myoutput)
+
+}
+
+prelimstudy=function(tol=0.01,parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2,pkeep=F,cutoff=5,mycore=1) {
+    if(sd(sapply(list(parameternames,nsims,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2),length))!=0) {
+        return(warning('All parameter lists should be the same length. Check arguments to make sure this is true.'))
+    }
+
+    set.seed(seed)
+
+    sduc=sdmnn=sdlm=sdcombat=vector(length=length(nsims))
+
+    names(sduc)=names(sdmnn)=names(sdlm)=names(sdcombat)=as.vector(parameternames)
+    failedsims=c(1:length(nsims))
+
+    for(i in c(1:length(nsims))) {
+        subseed=abs(round(rnorm(1,1000,200)))
+        mysim=dosim(nsim=nsims[[i]],
+                    ncells=cellcounts[[i]],ngenes=genecounts[[i]],
+                    xmus=xmeans[[i]],xsds=xsdss[[i]],
+                    ymus=ymeans[[i]],ysds=ysdss[[i]],
+                    prop1=propsbatch1[[i]],prop2=propsbatch2[[i]],keep=pkeep,cut=cutoff,ncore=mycore,s.seed=subseed)
+        if(nrow(mysim[[1]])>1) {
+            sduc[i]=max(apply(mysim[[1]],MARGIN=2,sd))
+            sdmnn[i]=max(apply(mysim[[2]],MARGIN=2,sd))
+            sdlm[i]=max(apply(mysim[[3]],MARGIN=2,sd))
+            sdcombat[i]=max(apply(mysim[[4]],MARGIN=2,sd))
+            failedsims=setdiff(failedsims,i)
+        } else {
+            warning(paste0('Preliminary Simulation Study Failed for Parameter Set: "', parameternames[[i]] ,'" Due to insufficient valid replicates \n Please Check Parameters \n Returning Supplied replicate number for this Parameter Set'))
+        }
+    }
+
+    sds=data.frame(sduc,sdmnn,sdlm,sdcombat)
+    maxsds=apply(sds,MARGIN=1,max)
+
+    newnsims=ceiling((maxsds/tol)^2)
+
+    if(length(failedsims>0)) {
+        newnsims[failedsims]=unlist(nsims)[failedsims]
+    }
+
+    return(as.list(newnsims))
+
+}
+
+simstudy=function(parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2,mykeep=F,mycut=5,mycore=1) {
+    if(sd(sapply(list(parameternames,nsims,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2),length))!=0) {
+        return(warning('All parameter lists should be the same length. Check arguments to make sure this is true.'))
+    }
+
+    set.seed(seed)
+
+    results=as.list(vector(length=length(nsims)))
+    names(results)=as.vector(parameternames)
+
+    for(i in c(1:length(nsims))) {
+        subseed=abs(round(rnorm(1,1000,200)))
+        results[[i]]=dosim(nsim=nsims[[i]],
+                    ncells=cellcounts[[i]],ngenes=genecounts[[i]],
+                    xmus=xmeans[[i]],xsds=xsdss[[i]],
+                    ymus=ymeans[[i]],ysds=ysdss[[i]],
+                    prop1=propsbatch1[[i]],prop2=propsbatch2[[i]],keep=mykeep,cutoff=mycut,ncore=mycore,s.seed=subseed)
+    }
+
+    return(results)
+}
+
+simresults=function(finishedstudy,sds=TRUE) {
+    repcount=lapply(finishedstudy,function(x) nrow(x[[1]]))
+
+    numberrows=sum(unlist(repcount))
+    failedsims= repcount==0
+
+    if(numberrows==0) {
+        warning('Simulation Failed, Change Parameters')
+        return(NA)
+    } else if (sum(failedsims)>0) {
+        warning('Some Simulation Settings Failed: Dropping Failed Simulation Settings')
+        parameternames=parameternames[!failedsims]
+
+        for(i in c(1:length(finishedstudy))){
+            if(failedsims[i]) {
+                finishedstudy[[i]]=NULL
+                repcount[[i]]=NULL
+            }
+        }
+    }
+
+    results=resultstype1=resultstype2=resultstype3=as.data.frame(matrix(nrow=numberrows,ncol=5))
+    times=as.data.frame(matrix(nrow=length(repcount),ncol=2))
+
+    rownames(times)=as.vector(parameternames)
+    colnames(results)=colnames(resultstype1)=colnames(resultstype2)=colnames(resultstype3)=c('Uncorrected', 'MNN', 'Limma', 'ComBat','Parameter.Set')
+    colnames(times)=c('Mean Run Time', 'SD Run-Time')
+
+    # typecheck=function(structure) {
+    #     if(class(structure()))
+    # }
+
+    t=1
+    for(i in c(1:length(repcount))) {
+        results[c(t:(t+repcount[[i]]-1)),5]=rep(parameternames[[i]],repcount[[i]])
+        results[c(t:(t+repcount[[i]]-1)),1]=finishedstudy[[i]][[1]][,1]
+        results[c(t:(t+repcount[[i]]-1)),2]=finishedstudy[[i]][[2]][,1]
+        results[c(t:(t+repcount[[i]]-1)),3]=finishedstudy[[i]][[3]][,1]
+        results[c(t:(t+repcount[[i]]-1)),4]=finishedstudy[[i]][[4]][,1]
+        times[i,]=c(mean(finishedstudy[[i]][[5]]),sd(finishedstudy[[i]][[5]]))
+        t=t+repcount[[i]]
+    }
+
+    t=1
+    for(i in c(1:length(repcount))) {
+        resultstype1[c(t:(t+repcount[[i]]-1)),5]=rep(parameternames[[i]],repcount[[i]])
+        resultstype1[c(t:(t+repcount[[i]]-1)),1]=finishedstudy[[i]][[1]][,2]
+        resultstype1[c(t:(t+repcount[[i]]-1)),2]=finishedstudy[[i]][[2]][,2]
+        resultstype1[c(t:(t+repcount[[i]]-1)),3]=finishedstudy[[i]][[3]][,2]
+        resultstype1[c(t:(t+repcount[[i]]-1)),4]=finishedstudy[[i]][[4]][,2]
+        t=t+repcount[[i]]
+    }
+
+    t=1
+    for(i in c(1:length(repcount))) {
+        resultstype2[c(t:(t+repcount[[i]]-1)),5]=rep(parameternames[[i]],repcount[[i]])
+        resultstype2[c(t:(t+repcount[[i]]-1)),1]=finishedstudy[[i]][[1]][,3]
+        resultstype2[c(t:(t+repcount[[i]]-1)),2]=finishedstudy[[i]][[2]][,3]
+        resultstype2[c(t:(t+repcount[[i]]-1)),3]=finishedstudy[[i]][[3]][,3]
+        resultstype2[c(t:(t+repcount[[i]]-1)),4]=finishedstudy[[i]][[4]][,3]
+        t=t+repcount[[i]]
+    }
+
+    t=1
+    for(i in c(1:length(repcount))) {
+        resultstype3[c(t:(t+repcount[[i]]-1)),5]=rep(parameternames[[i]],repcount[[i]])
+        resultstype3[c(t:(t+repcount[[i]]-1)),1]=finishedstudy[[i]][[1]][,4]
+        resultstype3[c(t:(t+repcount[[i]]-1)),2]=finishedstudy[[i]][[2]][,4]
+        resultstype3[c(t:(t+repcount[[i]]-1)),3]=finishedstudy[[i]][[3]][,4]
+        resultstype3[c(t:(t+repcount[[i]]-1)),4]=finishedstudy[[i]][[4]][,4]
+        t=t+repcount[[i]]
+    }
+
+    results[,5]=as.factor(results[,5])
+    resultstype1[,5]=as.factor(resultstype1[,5])
+    resultstype2[,5]=as.factor(resultstype2[,5])
+    resultstype3[,5]=as.factor(resultstype3[,5])
+
+    if(sds){
+        overalltable= tabular( (Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=results)
+        table1= tabular( (Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype1)
+        table2= tabular( (Factor(Parameter.Set,'Cell Type 2 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype2)
+        table3= tabular( (Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype3)
+    } else {
+        overalltable= tabular( (Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=results)
+        table1= tabular( (Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=resultstype1)
+        table2= tabular( (Factor(Parameter.Set,'Cell Type 2 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=resultstype2)
+        table3= tabular( (Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=resultstype3)
+    }
+
+    myresults=list(overalltable,table1,table2,table3,times)
+
+    names(myresults)=c('All Cells Breakdown', 'Cell Type 1 Breakdown',
+                       'Cell Type 2 Breakdown', 'Cell Type 3 Breakdown', 'Replicate Runtime Analysis')
+
+    return(myresults)
+}
+
+parameternames=list('Set 1', 'Set 2')
+nsims=list(10,10)
+seed=0
+cellcounts=list(100,100)
+genecounts=list(100,100)
+xmeans=list(c(0,5,5),c(0,2,2))
+xsdss=list(c(1,0.1,1),c(1,0.1,1))
+ymeans=list(c(5,5,0),c(2,2,0))
+ysdss=list(c(1,0.1,1),c(1,0.1,1))
+propsbatch1=list(c(0.3,0.5,0.2),c(0.3,0.5,0.2))
+propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05))
+
+nsims=prelimstudy(tol=0.01,parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2, mycore=2)
+
+seed=215
+
+# makeTSNE()
+tic()
+mystudy=simstudy(parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2,mycore = 2)
+toc()
+simresults(mystudy)
