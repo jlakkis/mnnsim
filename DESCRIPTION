@@ -19,4 +19,4 @@ Remotes:
 	bioc::3.8/scran, 
 	bioc::3.8/limma, 
 	bioc::3.8/sva, 
-	kBET
+	github::theislab/kBET
