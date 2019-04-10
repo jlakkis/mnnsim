@@ -24,5 +24,5 @@ Remotes:
 	bioc::3.8/scran, 
 	bioc::3.8/limma, 
 	bioc::3.8/sva,
-	bioc::3.8/BiocNeighbors
+	bioc::3.8/BiocNeighbors,
 	github::theislab/kBET
