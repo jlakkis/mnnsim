@@ -18,9 +18,11 @@ Imports:
 	scran,
 	limma,
 	sva,
-	kBET
+	kBET,
+	BiocNeighbors
 Remotes:
 	bioc::3.8/scran, 
 	bioc::3.8/limma, 
-	bioc::3.8/sva, 
+	bioc::3.8/sva,
+	bioc::3.8/BiocNeighbors
 	github::theislab/kBET
