@@ -10,16 +10,11 @@ License: NA
 Encoding: UTF-8
 LazyData: true
 Imports:
-	BiocNeighbors,
 	Rtsne,
 	scales,
 	tictoc,
 	tables,
 	parallel,
-	scran,
-	limma,
-	sva,
-	kBET,
 Remotes:
 	bioc::3.8/BiocNeighbors,
 	bioc::3.8/scran, 
