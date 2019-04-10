@@ -21,3 +21,14 @@ Remotes:
 	bioc::3.8/limma, 
 	bioc::3.8/sva,
 	github::theislab/kBET
+Depends:
+	Rtsne,
+	scales,
+	tictoc,
+	tables,
+	parallel,
+	BiocNeighbors,
+	scran, 
+	limma, 
+	sva,
+	kBET
