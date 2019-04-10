@@ -14,7 +14,11 @@ Imports:
 	scales,
 	tictoc,
 	tables,
-	parallel
+	parallel,
+	scran,
+	limma,
+	sva,
+	kBET
 Remotes:
 	bioc::3.8/scran, 
 	bioc::3.8/limma, 
