@@ -21,14 +21,4 @@ Remotes:
 	github::theislab/kBET,
 	bioc::3.8/BiocSingular,
 	bioc::3.8/BiocNeighbors
-Depends:
-	Rtsne,
-	scales,
-	tictoc,
-	tables,
-	parallel,
-	scran, 
-	limma, 
-	sva,
-	kBET
 RoxygenNote: 6.1.1
