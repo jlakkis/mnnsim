@@ -80,7 +80,7 @@ simresults=function(finishedstudy,sds=TRUE) {
         overalltable= tables::tabular( ( Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=results)
         table1= tables::tabular( ( Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype1)
         table2= tables::tabular( ( Factor(Parameter.Set,'Cell Type 2 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype2)
-        table3= tables::Fatabular( ( Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype3)
+        table3= tables::tabular( ( Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype3)
     } else {
         overalltable= tables::tabular( ( Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=results)
         table1= tables::tabular( ( Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=resultstype1)
