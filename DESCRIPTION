@@ -17,17 +17,6 @@ Imports:
 Remotes:
 	github::LTLA/BiocNeighbors,
 	bioc::3.8/scran, 
-	github::cran/limma, 
+	bioc::3.8/limma, 
 	github::jtleek/sva-devel,
 	github::theislab/kBET
-Depends:
-	Rtsne,
-	scales,
-	tictoc,
-	tables,
-	parallel,
-	BiocNeighbors,
-	scran, 
-	limma, 
-	sva,
-	kBET
