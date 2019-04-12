@@ -19,7 +19,7 @@ Remotes:
 	github::LTLA/BiocNeighbors,
 	github::MarioniLab/scran, 
 	github::cran/limma, 
-	github::jtleek/sva-devel
+	github::jtleek/sva-devel,
 	github::theislab/kBET
 Depends:
 	Rtsne,
