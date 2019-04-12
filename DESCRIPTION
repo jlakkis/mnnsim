@@ -18,7 +18,5 @@ Remotes:
 	bioc::3.8/scran, 
 	bioc::3.8/limma, 
 	github::jtleek/sva-devel,
-	github::theislab/kBET,
-	bioc::3.8/BiocSingular,
-	bioc::3.8/BiocNeighbors
+	github::theislab/kBET
 RoxygenNote: 6.1.1
