@@ -13,8 +13,7 @@ Imports:
 	Rtsne,
 	scales,
 	tictoc,
-	tables,
-	parallel
+	tables
 Remotes:
 	github::LTLA/BiocSingular,
 	github::LTLA/BiocNeighbors,
