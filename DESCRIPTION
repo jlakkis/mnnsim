@@ -9,6 +9,16 @@ Description: More about what it does (maybe more than one line)
 License: NA
 Encoding: UTF-8
 LazyData: true
+Depends:
+	Rtsne,
+	scales,
+	tictoc,
+	tables,
+	parallel,
+	scran, 
+	limma, 
+	sva,
+	kBET
 Imports:
 	Rtsne,
 	scales,
@@ -18,5 +28,6 @@ Remotes:
 	bioc::3.8/scran, 
 	bioc::3.8/limma, 
 	github::jtleek/sva-devel,
-	github::theislab/kBET
+	github::theislab/kBET,
+
 RoxygenNote: 6.1.1
