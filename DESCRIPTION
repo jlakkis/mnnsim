@@ -14,7 +14,7 @@ Imports:
 	scales,
 	tictoc,
 	tables,
-	parallel,
+	parallel
 Remotes:
 	github::LTLA/BiocSingular,
 	github::LTLA/BiocNeighbors,
