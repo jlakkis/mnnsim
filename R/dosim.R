@@ -27,9 +27,9 @@ dosim=function(nsim,ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2,keep=F,cutoff=
     }
 
     RNGkind("L'Ecuyer-CMRG") # Set RNG
-    cl = makeCluster(ncore)
-    clusterSetRNGStream(cl, iseed=s.seed)
-    output = parLapply(cl, as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)
+    cl = parallel::makeCluster(ncore)
+    parallel::clusterSetRNGStream(cl, iseed=s.seed)
+    output = parallel::parLapply(cl, as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)
     stopCluster(cl)
 
     coefficientsuc=t(sapply(output,function(r) r[[1]]))
