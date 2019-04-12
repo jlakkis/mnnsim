@@ -15,6 +15,7 @@ Imports:
 	tictoc,
 	tables
 Remotes:
+	github::LTLA/BiocSingular
 	github::MarioniLab/scran, 
 	bioc::3.8/limma, 
 	github::jtleek/sva-devel,
