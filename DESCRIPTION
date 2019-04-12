@@ -15,7 +15,6 @@ Imports:
 	tictoc,
 	tables
 Remotes:
-	github::LTLA/BiocNeighbors,
 	bioc::3.8/scran, 
 	bioc::3.8/limma, 
 	github::jtleek/sva-devel,
@@ -26,8 +25,8 @@ Depends:
 	tictoc,
 	tables,
 	parallel,
-	BiocNeighbors,
 	scran, 
 	limma, 
 	sva,
 	kBET
+RoxygenNote: 6.1.1
