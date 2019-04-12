@@ -16,7 +16,7 @@ Imports:
 	tables
 Remotes:
 	github::LTLA/BiocNeighbors,
-	github::MarioniLab/scran, 
+	bioc::3.8/scran, 
 	github::cran/limma, 
 	github::jtleek/sva-devel,
 	github::theislab/kBET
