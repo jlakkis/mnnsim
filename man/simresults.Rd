@@ -5,7 +5,7 @@
     A function to summarize the results of a simulation
 }
 \description{
-    This function takes the complicated output of the simstudy function and condenses it into simple and interpretable tables from which conclusions can be made about the efficacy of various batch correction methods for various parameter settings.
+    This function condenses the output of the simstudy function and into simple and interpretable tables from which conclusions can be made about the efficacy of various batch correction methods.
 }
 \usage{
 simresults(finishedstudy,sds=TRUE)
@@ -46,17 +46,17 @@ A list of five tables
 
   }
 \examples{
-    parameternames=list('Set 1', 'Set 2')
-    nsims=list(15,15)
-    seed=0
-    cellcounts=list(500,500)
-    genecounts=list(100,100)
-    xmeans=list(c(0,5,5),c(0,2,2))
-    xsdss=list(c(1,0.1,1),c(1,0.1,1))
-    ymeans=list(c(5,5,0),c(2,2,0))
-    ysdss=list(c(1,0.1,1),c(1,0.1,1))
-    propsbatch1=list(c(0.3,0.5,0.2),c(0.3,0.5,0.2))
-    propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05))
+parameternames=list('Set 1', 'Set 2')
+nsims=list(15,15)
+seed=0
+cellcounts=list(500,500)
+genecounts=list(100,100)
+xmeans=list(c(0,5,5),c(0,2,2))
+xsdss=list(c(1,0.1,1),c(1,0.1,1))
+ymeans=list(c(5,5,0),c(2,2,0))
+ysdss=list(c(1,0.1,1),c(1,0.1,1))
+propsbatch1=list(c(0.3,0.5,0.2),c(0.3,0.5,0.2))
+propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05))
 
 mystudy=simstudy(
     parameternames=parameternames,

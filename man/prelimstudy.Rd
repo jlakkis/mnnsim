@@ -5,7 +5,7 @@
     Perform a preliminary simulation study to estimate number of replicates
 }
 \description{
-    This is a function that, given lists of parameters, performs a preliminary simulation study to estimate number of replicates. It functions similiarly to to the main simulation study function simstudy, but computes the standard deviations of the simulated quantities of interest to estimate the necessary number of replicates necessary for estimating these parameters to a certain precision.
+    This is a function that, given lists of parameters, performs a preliminary simulation study to estimate number of replicates. It functions similiarly to to the main simulation study function simstudy, except it computes the standard deviations of the simulated quantities of interest to approximate the number of replicates necessary for estimating these parameters to a certain precision.
 }
 
 \usage{
