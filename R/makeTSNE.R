@@ -1,15 +1,6 @@
 makeTSNE=function(seed=0,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ymus=c(5,5,0),ysds=c(1,0.1,1),prop1=c(0.3,0.5,0.2),prop2=c(0.65,0.3,0.05)) {
     set.seed(seed)
 
-    if(!length(grep("scran",row.names(installed.packages())))){
-        if(!length(grep("BiocManager",row.names(installed.packages())))){
-            install.packages("BiocManager")
-        }
-
-        BiocManager::install("scran", version = "3.8",ask = F)
-    }
-    require("scran")
-
     plotFUN <- function(fname, Y, batch.id, cols, xlab="tSNE 1", ylab="tSNE 2", ...) {
         plot(Y[,1], Y[,2],
              pch=c(16, 2)[batch.id],
