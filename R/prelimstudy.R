@@ -3,6 +3,15 @@ prelimstudy=function(tol=0.01,parameternames,nsims,seed,cellcounts,genecounts,xm
         return(warning('All parameter lists should be the same length. Check arguments to make sure this is true.'))
     }
 
+    if(!length(grep("scran",row.names(installed.packages())))){
+        if(!length(grep("BiocManager",row.names(installed.packages())))){
+            install.packages("BiocManager")
+        }
+
+        BiocManager::install("scran", version = "3.8",ask = F)
+    }
+    require("scran")
+
     set.seed(seed)
 
     sduc=sdmnn=sdlm=sdcombat=vector(length=length(nsims))

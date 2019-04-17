@@ -3,6 +3,15 @@ simstudy=function(parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,y
         return(warning('All parameter lists should be the same length. Check arguments to make sure this is true.'))
     }
 
+    if(!length(grep("scran",row.names(installed.packages())))){
+        if(!length(grep("BiocManager",row.names(installed.packages())))){
+            install.packages("BiocManager")
+        }
+
+        BiocManager::install("scran", version = "3.8",ask = F)
+    }
+    require("scran")
+
     set.seed(seed)
 
     results=as.list(vector(length=length(nsims)))
