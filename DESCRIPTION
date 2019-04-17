@@ -15,7 +15,6 @@ Depends:
 	tictoc,
 	tables,
 	parallel,
-	scran, 
 	limma, 
 	sva,
 	kBET
