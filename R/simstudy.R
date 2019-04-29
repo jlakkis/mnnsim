@@ -4,12 +4,13 @@ simstudy=function(parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,y
     }
 
     set.seed(seed)
+    seedset=abs(round(rnorm(length(nsims),1000,200)))
 
     results=as.list(vector(length=length(nsims)))
     names(results)=as.vector(parameternames)
 
     for(i in c(1:length(nsims))) {
-        subseed=abs(round(rnorm(1,1000,200)))
+        subseed=seedset[i]
         results[[i]]=dosim(nsim=nsims[[i]],
                            ncells=cellcounts[[i]],ngenes=genecounts[[i]],
                            xmus=xmeans[[i]],xsds=xsdss[[i]],

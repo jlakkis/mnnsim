@@ -4,6 +4,7 @@ prelimstudy=function(tol=0.01,parameternames,nsims,seed,cellcounts,genecounts,xm
     }
 
     set.seed(seed)
+    seedset=abs(round(rnorm(length(nsims),1000,200)))
 
     sduc=sdmnn=sdlm=sdcombat=vector(length=length(nsims))
 
@@ -11,7 +12,7 @@ prelimstudy=function(tol=0.01,parameternames,nsims,seed,cellcounts,genecounts,xm
     failedsims=c(1:length(nsims))
 
     for(i in c(1:length(nsims))) {
-        subseed=abs(round(rnorm(1,1000,200)))
+        subseed=seedset[i]
         mysim=dosim(nsim=nsims[[i]],
                     ncells=cellcounts[[i]],ngenes=genecounts[[i]],
                     xmus=xmeans[[i]],xsds=xsdss[[i]],
