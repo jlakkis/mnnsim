@@ -24,6 +24,7 @@ Remotes:
 	LTLA/batchelor
 biocViews:
 	limma,
-	sva
+	sva,
+	BiocSingular
 
 RoxygenNote: 6.1.1
