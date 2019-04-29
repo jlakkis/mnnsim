@@ -22,8 +22,8 @@ Imports:
 Remotes:
 	theislab/kBET,
 	jtleek/sva-devel,
-	cran/limma,
 	MarioniLab/scran
-
+biocViews:
+	limma
 
 RoxygenNote: 6.1.1
