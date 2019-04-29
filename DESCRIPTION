@@ -22,8 +22,8 @@ Imports:
 Remotes:
 	theislab/kBET
 biocViews:
+	batchelor,
 	limma,
-	sva,
-	batchelor
+	sva
 
 RoxygenNote: 6.1.1
