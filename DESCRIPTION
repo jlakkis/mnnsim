@@ -24,6 +24,6 @@ Remotes:
 biocViews:
 	limma,
 	sva,
-	scran
+	batchelor
 
 RoxygenNote: 6.1.1

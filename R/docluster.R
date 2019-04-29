@@ -9,7 +9,7 @@ docluster=function(mydata,type="uncorrected",silscores=TRUE,cosnorm=TRUE) {
     if(type=='uncorrected') {
         all.dists <- as.matrix(dist(t(raw.all)))
     } else if (type =='mnn') {
-        Xmnn <- scran::mnnCorrect(mydata[[1]], mydata[[2]], k=20, sigma=1, cos.norm.in=cosnorm, cos.norm.out=cosnorm, var.adj=TRUE)
+        Xmnn <- batchelor::mnnCorrect(mydata[[1]], mydata[[2]], k=20, sigma=1, cos.norm.in=cosnorm, cos.norm.out=cosnorm, var.adj=TRUE)
         corre <- cbind(Xmnn$corrected[[1]],Xmnn$corrected[[2]])
         all.dists <- as.matrix(dist(t(corre)))
     } else if (type =='limma') {
