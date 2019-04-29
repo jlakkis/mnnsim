@@ -20,11 +20,11 @@ Imports:
 	limma,
 	batchelor
 Remotes:
+ 	LTLA/BiocSingular,
 	theislab/kBET,
 	LTLA/batchelor
 biocViews:
 	limma,
-	sva,
-	BiocSingular
+	sva
 
 RoxygenNote: 6.1.1
