@@ -18,7 +18,7 @@ Imports:
 	kBET,
 	sva,
 	limma,
-	scran
+	batchelor
 Remotes:
 	theislab/kBET
 biocViews:
