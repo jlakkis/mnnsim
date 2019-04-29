@@ -19,11 +19,6 @@ Imports:
 	limma, 
 	sva,
 	kBET
-Imports:
-	Rtsne,
-	scales,
-	tictoc,
-	tables
 Remotes:
 	bioc::3.9/scran, 
 	bioc::3.9/limma, 
