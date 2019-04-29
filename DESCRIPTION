@@ -18,6 +18,7 @@ Imports:
 	kBET,
 	sva,
 	limma,
+	BiocSingular,
 	batchelor
 Remotes:
  	LTLA/BiocSingular,
