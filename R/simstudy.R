@@ -17,6 +17,7 @@ simstudy=function(parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,y
                            prop1=propsbatch1[[i]],prop2=propsbatch2[[i]],
                            keep=mykeep,cut=mycut,ncore=mycore,s.seed=subseed,
                            dgeneratedata = dgeneratedata,ddocluster=ddocluster)
+        message(i)
     }
 
     return(results)

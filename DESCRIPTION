@@ -20,9 +20,9 @@ Imports:
 	limma,
 	batchelor
 Remotes:
-	theislab/kBET
+	theislab/kBET,
+	LTLA/batchelor
 biocViews:
-	batchelor,
 	limma,
 	sva
 
