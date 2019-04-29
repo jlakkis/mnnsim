@@ -20,10 +20,10 @@ Imports:
 	limma,
 	scran
 Remotes:
-	theislab/kBET,
-	jtleek/sva-devel,
-	MarioniLab/scran
+	theislab/kBET
 biocViews:
-	limma
+	limma,
+	sva,
+	scran
 
 RoxygenNote: 6.1.1
