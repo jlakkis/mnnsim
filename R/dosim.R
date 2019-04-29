@@ -17,20 +17,23 @@ dosim=function(nsim,ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2,keep=F,cutoff=
             myoutput[[5]]=F
         }
 
-        sink("aux")
         info=tictoc::toc()
-        sink(NULL)
 
         myoutput[[6]]=info$toc-info$tic
 
         base::return(myoutput)
     }
 
-    RNGkind("L'Ecuyer-CMRG") # Set RNG
-    cl = parallel::makeCluster(ncore)
-    parallel::clusterSetRNGStream(cl, iseed=s.seed)
-    output = parallel::parLapply(cl, as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)
-    stopCluster(cl)
+    if(ncore>1) {
+        RNGkind("L'Ecuyer-CMRG") # Set RNG
+        cl = parallel::makeCluster(ncore)
+        parallel::clusterSetRNGStream(cl, iseed=s.seed)
+        output = parallel::parLapply(cl, as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)
+        stopCluster(cl)
+    } else {
+        set.seed(s.seed)
+        lapply(cl, as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)
+    }
 
     coefficientsuc=t(sapply(output,function(r) r[[1]]))
     coefficientsmnn=t(sapply(output,function(r) r[[2]]))
