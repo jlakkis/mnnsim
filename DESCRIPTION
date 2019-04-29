@@ -27,7 +27,7 @@ Imports:
 Remotes:
 	bioc::3.9/scran, 
 	bioc::3.9/limma, 
-	github::jtleek/sva-devel,
+	bioc::3.8/sva,
 	github::theislab/kBET
 
 RoxygenNote: 6.1.1
