@@ -5,7 +5,7 @@ makeTSNE=function(seed=0,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ym
         plot(Y[,1], Y[,2],
              pch=c(16, 2)[batch.id],
              cex=c(2.5, 3.5)[batch.id],
-             col=alpha(cols, 0.6),
+             col=scales::alpha(cols, 0.6),
              xlab=xlab, ylab=ylab, ...)
     }
 
