@@ -10,7 +10,8 @@ docluster=function(mydata,type="uncorrected",silscores=TRUE,cosnorm=TRUE) {
         all.dists <- as.matrix(dist(t(raw.all)))
     } else if (type =='mnn') {
         Xmnn <- batchelor::mnnCorrect(raw.all, batch = batch.id, k=20, sigma=1, cos.norm.in=cosnorm, cos.norm.out=cosnorm, var.adj=TRUE)
-        Xmnn = assays(Xmnn)$'corrected'
+        Xmnn = batchelor::assays(Xmnn)
+        Xmnn = Xmnn$'corrected'
         all.dists <- as.matrix(dist(t(Xmnn)))
     } else if (type =='limma') {
         Xlm <- limma::removeBatchEffect(raw.all, factor(batch.id))
