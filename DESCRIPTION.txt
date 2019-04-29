@@ -14,11 +14,16 @@ Imports:
 	scales,
 	tictoc,
 	tables,
-	parallel
+	parallel,
+	kBET,
+	sva,
+	limma,
+	scran
 Remotes:
-	bioc::3.9/scran, 
-	bioc::3.9/limma, 
-	bioc::3.8/sva,
-	github::theislab/kBET
+	theislab/kBET,
+	jtleek/sva-devel,
+	cran/limma,
+	MarioniLab/scran
+
 
 RoxygenNote: 6.1.1
