@@ -25,8 +25,8 @@ Imports:
 	tictoc,
 	tables
 Remotes:
-	bioc::3.8/scran, 
-	bioc::3.8/limma, 
+	bioc::3.9/scran, 
+	bioc::3.9/limma, 
 	github::jtleek/sva-devel,
 	github::theislab/kBET
 
