@@ -8,7 +8,7 @@ Description: More about what it does (maybe more than one line)
     Compare the quality of various batch correction methods (Mutual Nearest Neighbors, Limma, ComBat) both visually with tSNE plots and quantitatively via silhouette scores.
 License: NA
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 biocViews:
 Depends:
 	Rtsne,
