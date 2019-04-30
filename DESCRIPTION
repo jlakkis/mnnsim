@@ -10,7 +10,7 @@ License: NA
 Encoding: UTF-8
 LazyData: true
 biocViews:
-Imports:
+Depends:
 	Rtsne,
 	scales,
 	tictoc,
@@ -21,9 +21,6 @@ Imports:
 	limma,
 	batchelor
 Remotes:
-	theislab/kBET,
-	bioc::3.8/sva,
-	bioc::3.8/limma,
-	bioc::3.9/batchelor
+	theislab/kBET
 
 RoxygenNote: 6.1.1
