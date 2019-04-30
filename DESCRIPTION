@@ -9,6 +9,7 @@ Description: More about what it does (maybe more than one line)
 License: NA
 Encoding: UTF-8
 LazyData: true
+biocViews:
 Imports:
 	Rtsne,
 	scales,
@@ -18,14 +19,8 @@ Imports:
 	kBET,
 	sva,
 	limma,
-	BiocSingular,
 	batchelor
 Remotes:
- 	LTLA/BiocSingular,
-	theislab/kBET,
-	LTLA/batchelor
-biocViews:
-	limma,
-	sva
+	theislab/kBET
 
 RoxygenNote: 6.1.1
