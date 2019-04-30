@@ -18,8 +18,7 @@ Depends:
 	parallel,
 	kBET,
 	sva,
-	limma,
-	BiocSingular
+	limma
 Remotes:
 	theislab/kBET,
 	LTLA/batchelor
