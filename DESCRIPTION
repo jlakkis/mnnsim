@@ -19,8 +19,9 @@ Depends:
 	kBET,
 	sva,
 	limma,
-	batchelor
+	BiocSingular
 Remotes:
-	theislab/kBET
+	theislab/kBET,
+	LTLA/batchelor
 
 RoxygenNote: 6.1.1
