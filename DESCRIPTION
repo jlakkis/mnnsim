@@ -18,7 +18,8 @@ Depends:
 	parallel,
 	kBET,
 	sva,
-	limma
+	limma,
+	batchelor
 Remotes:
 	theislab/kBET,
 	LTLA/batchelor
