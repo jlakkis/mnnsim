@@ -21,6 +21,9 @@ Imports:
 	limma,
 	batchelor
 Remotes:
-	theislab/kBET
+	theislab/kBET,
+	bioc::3.8/sva,
+	bioc::3.8/limma,
+	bioc::3.9/batchelor
 
 RoxygenNote: 6.1.1
