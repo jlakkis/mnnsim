@@ -20,6 +20,7 @@ Depends:
 	sva,
 	limma,
 	BiocSingular,
+	genefilter,
 	batchelor
 Remotes:
 	theislab/kBET,
