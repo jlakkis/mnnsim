@@ -26,5 +26,10 @@ Remotes:
 	theislab/kBET,
 	LTLA/BiocSingular,
 	LTLA/batchelor
+Suggests: 
+	knitr, 
+	rmarkdown
+VignetteBuilder: 
+	knitr
 
 RoxygenNote: 6.1.1

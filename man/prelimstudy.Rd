@@ -101,17 +101,17 @@ prelimstudy(
 }
 
 \examples{
-parameternames=list('Set 1', 'Set 2')
-nsims=list(10,10)
+parameternames=list('Original', 'Smaller Differences', 'More Genes')
+nsims=list(50,50,50)
 seed=0
-cellcounts=list(500,500)
-genecounts=list(100,100)
-xmeans=list(c(0,5,5),c(0,2,2))
-xsdss=list(c(1,0.1,1),c(1,0.1,1))
-ymeans=list(c(5,5,0),c(2,2,0))
-ysdss=list(c(1,0.1,1),c(1,0.1,1))
-propsbatch1=list(c(0.3,0.5,0.2),c(0.3,0.5,0.2))
-propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05))
+cellcounts=list(500,500,500)
+genecounts=list(100,100,5000)
+xmeans=list(c(0,5,5),c(0,2,2),c(0,5,5))
+xsdss=list(c(1,0.1,1),c(1,0.1,1),c(1,0.1,1))
+ymeans=list(c(5,5,0),c(2,2,0),c(5,5,0))
+ysdss=list(c(1,0.1,1),c(1,0.1,1),c(1,0.1,1))
+propsbatch1=list(c(0.3,0.5,0.2),c(0.3,0.5,0.2),c(0.3,0.5,0.2))
+propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05),c(0.65,0.3,0.05))
 
 nsims=prelimstudy(
     tol=0.01,parameternames=parameternames,
