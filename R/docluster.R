@@ -3,6 +3,12 @@ docluster=function(mydata,type="uncorrected",silscores=TRUE,cosnorm=TRUE) {
         return(warning('Not a Valid Method: Please set argument "type" to one of: "uncorrected","mnn","limma","combat"'))
     }
 
+    quiet <- function(x) {
+        sink(tempfile())
+        on.exit(sink())
+        invisible(force(x))
+    }
+
     raw.all <- cbind(mydata[[1]], mydata[[2]])
     batch.id <- rep(1:2, c(ncol(mydata[[1]]), ncol(mydata[[2]])))
 
@@ -17,7 +23,7 @@ docluster=function(mydata,type="uncorrected",silscores=TRUE,cosnorm=TRUE) {
         Xlm <- limma::removeBatchEffect(raw.all, factor(batch.id))
         all.dists <- as.matrix(dist(t(Xlm)))
     } else {
-        cleandat <- suppressMessages( sva::ComBat(raw.all, factor(batch.id), mod=NULL, prior.plots = FALSE) )
+        cleandat <- quiet(suppressMessages( sva::ComBat(raw.all, factor(batch.id), mod=NULL, prior.plots = FALSE) ))
         all.dists <- as.matrix(dist(t(cleandat)))
     }
 

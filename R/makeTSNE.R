@@ -14,7 +14,7 @@ makeTSNE=function(seed=0,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ym
     unc=docluster(mydat,silscores = FALSE)
     mnn=docluster(mydat,type = 'mnn', silscores = FALSE,cosnorm = FALSE)
     lm=docluster(mydat,type = 'limma', silscores = FALSE)
-    combat=docluster(mydat,type = 'combat', silscores = FALSE)
+    combat = docluster(mydat,type = 'combat', silscores = FALSE)
 
     layout(matrix(c(1,2,3,4,5,5), 3, 2, byrow = TRUE))
     plotFUN(paste0("figs/unc.png"), Y=unc[[1]]$Y, batch.id=unc[[2]], cols=unc[[3]], main="Uncorrected")
