@@ -2,6 +2,12 @@ dosim=function(nsim,ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2,keep=F,cutoff=
 
     message('Starting a Simulation \n')
 
+    quiet <- function(x) {
+        sink(tempfile())
+        on.exit(sink())
+        invisible(force(x))
+    }
+
     lparallizer=function(iter,pgeneratedata,pdocluster,pncells,pngenes,pxmus,pxsds,pymus,pysds,pprop1,pprop2,pcutoff,pkeep) {
 
         tictoc::tic()
@@ -17,7 +23,7 @@ dosim=function(nsim,ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2,keep=F,cutoff=
             myoutput[[5]]=F
         }
 
-        info=tictoc::toc()
+        info=quiet(tictoc::toc())
 
         myoutput[[6]]=info$toc-info$tic
 
