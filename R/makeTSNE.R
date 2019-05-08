@@ -12,7 +12,7 @@ makeTSNE=function(seed=0,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ym
     mydat=generatedata(ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2)
 
     unc=docluster(mydat,silscores = FALSE)
-    mnn=docluster(mydat,type = 'mnn', silscores = FALSE,cosnorm = FALSE)
+    mnn=docluster(mydat,type = 'mnn', silscores = FALSE,cosnorm = TRUE)
     lm=docluster(mydat,type = 'limma', silscores = FALSE)
     combat = docluster(mydat,type = 'combat', silscores = FALSE)
 
