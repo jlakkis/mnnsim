@@ -78,7 +78,7 @@ simresults=function(finishedstudy,sds=TRUE) {
     times=as.data.frame(matrix(nrow=length(repcount),ncol=2))
 
     rownames(times)=as.vector(parameternames)
-    colnames(results)=colnames(resultstype1)=colnames(resultstype2)=colnames(resultstype3)=c('Uncorrected', 'MNN', 'Limma', 'ComBat','Parameter.Set')
+    colnames(results)=colnames(resultstype1)=colnames(resultstype2)=colnames(resultstype3)=c('raw', 'mnn', 'limma', 'combat','Parameter.Set')
     colnames(times)=c('Mean Run Time', 'SD Run-Time')
 
     # typecheck=function(structure) {
@@ -132,15 +132,15 @@ simresults=function(finishedstudy,sds=TRUE) {
     resultstype3[,5]=as.factor(resultstype3[,5])
 
     if(sds){
-        overalltable= tables::tabular( ( Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=results)
-        table1= tables::tabular( ( Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype1)
-        table2= tables::tabular( ( Factor(Parameter.Set,'Cell Type 2 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype2)
-        table3= tables::tabular( ( Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(Uncorrected + MNN + Limma + ComBat), data=resultstype3)
+        overalltable= tables::tabular( ( Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(raw + mnn + limma + combat), data=results)
+        table1= tables::tabular( ( Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(raw + mnn + limma + combat), data=resultstype1)
+        table2= tables::tabular( ( Factor(Parameter.Set,'Cell Type 2 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(raw + mnn + limma + combat), data=resultstype2)
+        table3= tables::tabular( ( Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*(mean + sd)*(raw + mnn + limma + combat), data=resultstype3)
     } else {
-        overalltable= tables::tabular( ( Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=results)
-        table1= tables::tabular( ( Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=resultstype1)
-        table2= tables::tabular( ( Factor(Parameter.Set,'Cell Type 2 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=resultstype2)
-        table3= tables::tabular( ( Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(Uncorrected + MNN + Limma + ComBat), data=resultstype3)
+        overalltable= tables::tabular( ( Factor(Parameter.Set,'Overall Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(raw + mnn + limma + combat), data=results)
+        table1= tables::tabular( ( Factor(Parameter.Set,'Cell Type 1 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(raw + mnn + limma + combat), data=resultstype1)
+        table2= tables::tabular( ( Factor(Parameter.Set,'Cell Type 2 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(raw + mnn + limma + combat), data=resultstype2)
+        table3= tables::tabular( ( Factor(Parameter.Set,'Cell Type 3 Silhouette') ) ~ (n=1) + Format(digits=2)*mean*(raw + mnn + limma + combat), data=resultstype3)
     }
 
     myresults=list(overalltable,table1,table2,table3,times)
