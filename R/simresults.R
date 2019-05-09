@@ -51,7 +51,7 @@
 #'
 #'}
 #' @importFrom stats sd
-#' @importFrom tables tabular Factor
+#' @importFrom tables tabular Factor labelSubset
 
 simresults=function(finishedstudy,sds=TRUE) {
     repcount=lapply(finishedstudy,function(x) nrow(x[[1]]))
