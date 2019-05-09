@@ -16,6 +16,7 @@
 #' @param mycore The number of computing cores to use for parallelizing the simulation.
 #' @param dgeneratedata The function to use for generating data. By default this equals generatedata. Highly recommended not to modify this argument.
 #' @param ddocluster The function to use for clustering data. By default this equals docluster. Highly recommended not to modify this argument.
+#' @export
 #' @return A list of simulation results. Each element of the list contains simulations results (output of dosim) for one of the supplied combinations of parameters.
 #'
 #' As mentioned in the documentation of dosim, the simulation results of a single simulation consist of the following list of simulation items:
@@ -60,7 +61,6 @@
 #'    propsbatch2=propsbatch2,mycore=1
 #')
 #'}
-#' @export
 #' @importFrom stats rnorm sd
 
 simstudy=function(parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2,mykeep=F,mycutoff=5,mycore=1,dgeneratedata=generatedata,ddocluster=docluster) {
