@@ -60,6 +60,7 @@
 #'    propsbatch2=propsbatch2,mycore=1
 #')
 #'}
+#' @export
 #' @importFrom stats rnorm sd
 
 simstudy=function(parameternames,nsims,seed,cellcounts,genecounts,xmeans,xsdss,ymeans,ysdss,propsbatch1,propsbatch2,mykeep=F,mycutoff=5,mycore=1,dgeneratedata=generatedata,ddocluster=docluster) {

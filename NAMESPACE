@@ -3,6 +3,7 @@
 export(makeTSNE)
 export(prelimstudy)
 export(simresults)
+export(simstudy)
 importFrom(Rtsne,Rtsne)
 importFrom(SummarizedExperiment,assays)
 importFrom(batchelor,mnnCorrect)
