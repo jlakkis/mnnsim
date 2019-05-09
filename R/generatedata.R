@@ -1,3 +1,14 @@
+#' @title generatedata
+#' @importFrom stats rnorm
+#' @param nc number of cells
+#' @param ng number of genes
+#' @param xm low-dimensional mean of x-values
+#' @param xsigma low-dimensional sd of x-values
+#' @param ym low-dimensional mean of y-values
+#' @param ysigma low-dimensional sd of y-values
+#' @param p1 batch 1 cell-type proportions
+#' @param p2 batch 2 cell-type proportions
+
 generatedata=function(nc,ng,xm,xsigma,ym,ysigma,p1,p2) {
     checkquality=function(types) {
         return(min(sapply(c(1:3),function(c) sum(types==c))))

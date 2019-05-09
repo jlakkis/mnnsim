@@ -1,3 +1,22 @@
+#' @title generatedata
+#' @importFrom tictoc tic toc
+#' @importFrom parallel makeCluster clusterSetRNGStream parLapply stopCluster
+#' @param nsim number of simulations
+#' @param ncells number of single-cells
+#' @param ngenes number of genes
+#' @param xmus low-d x-means
+#' @param xsds low-d x-sds
+#' @param ymus low-d y-means
+#' @param ysds low-d y-sds
+#' @param prop1 batch 1 cell type proportions
+#' @param prop2 batch 2 cell type proportions
+#' @param keep whether to keep "low-quality" replicates
+#' @param cutoff criterion for determining whether a replicate is low-quality
+#' @param ncore number of cores for parallel computing
+#' @param s.seed rng seed
+#' @param dgeneratedata technical argument
+#' @param ddocluster technical argument
+#'
 dosim=function(nsim,ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2,keep=F,cutoff=5,ncore,s.seed,dgeneratedata=generatedata,ddocluster=docluster) {
 
     message('Starting a Simulation \n')
@@ -35,7 +54,7 @@ dosim=function(nsim,ncells,ngenes,xmus,xsds,ymus,ysds,prop1,prop2,keep=F,cutoff=
         cl = parallel::makeCluster(ncore)
         parallel::clusterSetRNGStream(cl, iseed=s.seed)
         output = parallel::parLapply(cl, as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)
-        stopCluster(cl)
+        parallel::stopCluster(cl)
     } else {
         set.seed(s.seed)
         output=lapply(as.list(c(1:nsim)), lparallizer,pgeneratedata=dgeneratedata,pdocluster=ddocluster,pncells=ncells,pngenes=ngenes,pxmus=xmus,pxsds=xsds,pymus=ymus,pysds=ysds,pprop1=prop1,pprop2=prop2,pcutoff=cutoff,pkeep=keep)

@@ -6,11 +6,11 @@ Author: Justin Lakkis
 Maintainer: Justin Lakkis <jlakks@pennmedicine.upenn.edu>
 Description: More about what it does (maybe more than one line)
     Compare the quality of various batch correction methods (Mutual Nearest Neighbors, Limma, ComBat) both visually with tSNE plots and quantitatively via silhouette scores.
-License: NA
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 biocViews:
-Depends:
+Imports:
 	Rtsne,
 	scales,
 	tictoc,
@@ -21,7 +21,9 @@ Depends:
 	limma,
 	BiocSingular,
 	genefilter,
-	batchelor
+	batchelor,
+	SummarizedExperiment,
+	cluster
 Remotes:
 	theislab/kBET,
 	LTLA/BiocSingular,
@@ -31,5 +33,4 @@ Suggests:
 	rmarkdown
 VignetteBuilder: 
 	knitr
-
 RoxygenNote: 6.1.1

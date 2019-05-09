@@ -1,8 +1,63 @@
+#' @title A function to summarize the results of a simulation
+#' @description This function condenses the output of the simstudy function and into simple and interpretable tables from which conclusions can be made about the efficacy of various batch correction methods.
+#' @param finishedstudy The output of the simstudy function.
+#' @param sds Whether to generate standard deviations for the various summary quantities in the outputted tables.
+#' @export
+#' @return  A list of five tables
+#' \item{All Cells Breakdown}{
+#' This table summarizes information from all replicates using all cells.
+#' For every parameter combination, this table provides the number of simulation replicates, the mean of mean silhouette coefficients across all replicates for uncorrected data, MNN corrected data, Limma corrected data, and ComBat data, as well as (optionally) the standard deviation of mean silhouette coefficients for each of these batch correction methods.
+#' }
+#' \item{Cell Type 1 Breakdown}{
+#' This table summarizes information from all replicates using cells of type 1.
+#' For every parameter combination, this table provides the number of simulation replicates, the mean of mean silhouette coefficients across all replicates for uncorrected data, MNN corrected data, Limma corrected data, and ComBat data, as well as (optionally) the standard deviation of mean silhouette coefficients for each of these batch correction methods.
+#' }
+#' \item{Cell Type 2 Breakdown}{
+#' This table summarizes information from all replicates using cells of type 2.
+#' For every parameter combination, this table provides the number of simulation replicates, the mean of mean silhouette coefficients across all replicates for uncorrected data, MNN corrected data, Limma corrected data, and ComBat data, as well as (optionally) the standard deviation of mean silhouette coefficients for each of these batch correction methods.
+#' }
+#' \item{Cell Type 3 Breakdown}{
+#' This table summarizes information from all replicates using cells of type 3.
+#' For every parameter combination, this table provides the number of simulation replicates, the mean of mean silhouette coefficients across all replicates for uncorrected data, MNN corrected data, Limma corrected data, and ComBat data, as well as (optionally) the standard deviation of mean silhouette coefficients for each of these batch correction methods.
+#' }
+#' \item{Replicate Runtime Analysis}{
+#' This table summarizes runtime information from all replicates.
+#' For every parameter combination, this table provides the mean and standard deviation of runtime per replicate.
+#' }
+#' @examples \dontrun{
+#' parameternames=list('Original', 'Smaller Differences', 'More Genes')
+#' nsims=list(50,50,50)
+#' seed=0
+#' cellcounts=list(500,500,500)
+#' genecounts=list(100,100,5000)
+#' xmeans=list(c(0,5,5),c(0,2,2),c(0,5,5))
+#' xsdss=list(c(1,0.1,1),c(1,0.1,1),c(1,0.1,1))
+#' ymeans=list(c(5,5,0),c(2,2,0),c(5,5,0))
+#' ysdss=list(c(1,0.1,1),c(1,0.1,1),c(1,0.1,1))
+#' propsbatch1=list(c(0.3,0.5,0.2),c(0.3,0.5,0.2),c(0.3,0.5,0.2))
+#' propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05),c(0.65,0.3,0.05))
+#'
+#'simstudy(
+#'parameternames=parameternames,
+#'nsims=nsims,seed=seed,
+#'cellcounts=cellcounts,
+#'genecounts=genecounts,
+#'xmeans=xmeans,xsdss=xsdss,ymeans=ymeans,
+#'ysdss=ysdss,propsbatch1=propsbatch1,
+#'propsbatch2=propsbatch2,mycore=1
+#')
+#'
+#'simresults(mystudy)
+#'
+#'}
+#' @importFrom stats sd
+#' @importFrom tables tabular
+
 simresults=function(finishedstudy,sds=TRUE) {
     repcount=lapply(finishedstudy,function(x) nrow(x[[1]]))
 
     numberrows=sum(unlist(repcount))
-    failedsims= repcount==0
+    failedsims=repcount==0
 
     if(numberrows==0) {
         warning('Simulation Failed, Change Parameters')

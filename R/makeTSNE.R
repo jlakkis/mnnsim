@@ -19,6 +19,7 @@
 #' prop1=c(0.3,0.5,0.2),prop2=c(0.65,0.3,0.05)
 #' )
 #' }
+#' @importFrom graphics layout legend plot plot.new
 
 makeTSNE=function(seed=0,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ymus=c(5,5,0),ysds=c(1,0.1,1),prop1=c(0.3,0.5,0.2),prop2=c(0.65,0.3,0.05)) {
     set.seed(seed)
