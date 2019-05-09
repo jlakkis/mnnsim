@@ -26,5 +26,5 @@ makeTSNE=function(seed=0,ncells=1000,ngenes=100,xmus=c(0,5,5),xsds=c(1,0.1,1),ym
     legend('center', legend = c("Cell type 1", "Cell type 2", "Cell type 3", "Batch 1", "Batch 2"),
            col = c("brown1", "gold2", "blue", "black", "black"),
            pch = c(15, 15, 15, 16, 2),
-           cex = 1.75,y.intersp = 0.15, bty = "n")
+           cex = 1.75,y.intersp = 0.5, bty = "n")
 }
