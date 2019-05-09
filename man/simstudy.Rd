@@ -83,13 +83,13 @@ propsbatch1=list(c(0.3,0.5,0.2),c(0.3,0.5,0.2),c(0.3,0.5,0.2))
 propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05),c(0.65,0.3,0.05))
 
 simstudy(
-parameternames=parameternames,
-nsims=nsims,seed=seed,
-cellcounts=cellcounts,
-genecounts=genecounts,
-xmeans=xmeans,xsdss=xsdss,ymeans=ymeans,
-ysdss=ysdss,propsbatch1=propsbatch1,
-propsbatch2=propsbatch2,mycore=1
+   parameternames=parameternames,
+   nsims=nsims,seed=seed,
+   cellcounts=cellcounts,
+   genecounts=genecounts,
+   xmeans=xmeans,xsdss=xsdss,ymeans=ymeans,
+   ysdss=ysdss,propsbatch1=propsbatch1,
+   propsbatch2=propsbatch2,mycore=1
 )
 }
 }

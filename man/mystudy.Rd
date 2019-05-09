@@ -4,9 +4,6 @@
 \name{mystudy}
 \alias{mystudy}
 \title{mystudy}
-\usage{
-data(mystudy)
-}
 \description{
-The object of simulation results returned from the "simstudy" function when run on the parameter combinations from the tutorial for the mnnsim package.
+The data object consisting of simulation results returned from the "simstudy" function in the package tutorial for the mnnsim package.
 }

@@ -51,7 +51,7 @@
 #'
 #'}
 #' @importFrom stats sd
-#' @importFrom tables tabular
+#' @importFrom tables tabular Factor
 
 simresults=function(finishedstudy,sds=TRUE) {
     repcount=lapply(finishedstudy,function(x) nrow(x[[1]]))

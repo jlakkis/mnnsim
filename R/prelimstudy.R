@@ -33,13 +33,13 @@
 #' propsbatch2=list(c(0.65,0.3,0.05),c(0.65,0.3,0.05),c(0.65,0.3,0.05))
 #'
 #' nsims=prelimstudy(
-#' tol=0.01,parameternames=parameternames,
-#' nsims=nsims,seed=seed,
-#' cellcounts=cellcounts,
-#' genecounts=genecounts,
-#' xmeans=xmeans,xsdss=xsdss,ymeans=ymeans,
-#' ysdss=ysdss,propsbatch1=propsbatch1,
-#' propsbatch2=propsbatch2,mycore=1
+#'     tol=0.01,parameternames=parameternames,
+#'     nsims=nsims,seed=seed,
+#'     cellcounts=cellcounts,
+#'     genecounts=genecounts,
+#'     xmeans=xmeans,xsdss=xsdss,ymeans=ymeans,
+#'     ysdss=ysdss,propsbatch1=propsbatch1,
+#'     propsbatch2=propsbatch2,mycore=1
 #' )
 #'
 #' nsims
