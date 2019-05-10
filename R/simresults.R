@@ -56,7 +56,7 @@
 simresults=function(finishedstudy,sds=TRUE) {
     repcount=lapply(finishedstudy,function(x) nrow(x[[1]]))
 
-    parameternames=attributes(finishedstudy)
+    parameternames=as.list(attributes(finishedstudy)$names)
     numberrows=sum(unlist(repcount))
     failedsims=repcount==0
 
