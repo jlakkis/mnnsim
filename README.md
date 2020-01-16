@@ -18,4 +18,4 @@ if("mnnsim" %in% rownames(installed.packages()) == FALSE) {
 ```
 
 ## Reference
-For more information about the package, check out the [vignette](http://rpubs.com/jlakkis/495004). For code assessing the parallel code, check out the [parallel code script](http://rpubs.com/jlakkis/495061).
+For a detailed walkthrough of this package, please check out this [vignette](http://rpubs.com/jlakkis/495004). For a quantitative assessment of the benefits of parallelizing this simulation, check out the [parallel code script](http://rpubs.com/jlakkis/495061).
